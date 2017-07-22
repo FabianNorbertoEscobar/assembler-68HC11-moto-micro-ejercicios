@@ -1,0 +1,122 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * INTERRUPCIONES
+
+                   * Dado un microcontralador Motorola MC68HC11 cuyo timer ha
+.                  sido programado para generar interrupciones cada
+                   * 500ms, codifique la rutina de atencion a la interrupcion
+.                  para mantener en tres posiciones de memoria (desde
+                   * la posicion $0000) la hora, los minutos y los segundos
+.                  transcurridos. La interrupcion empleada es Timer
+                   * Imput Capture 3, cuyo vector debe almacenarse en $FFEA y
+.                  $FFEB segun el manual del microcontrolador. De
+                   * igual forma, codifique otra interrupcion cuyo vector se
+.                  buscara en $FFDA y $FFDB para inicializar en cero
+                   * el reloj, como si de un cronometro se tratase.
+
+                   * area de reserva
+                                   ORG     $0000
+                   HH              RMB     1               cuento las horas
+                   MM              RMB     1               cuento los minutos
+                   SS              RMB     1               cuento los segundos
+                   MS              RMB     1               cuento los medio
+.                  segundos o 500 milisegundos
+
+                   * vectores de ISR
+                                   ORG     $FFEA
+  FFEA E0 00                       DW      TIC3            almaceno la direccion
+.                  de la interrupcion Timer Imput Capture 3
+
+                                   ORG     $FFDA
+  FFDA D0 00                       DW      INICIO          almaceno la direccion
+.                  de la interrupcion que inicializa el reloj
+
+                   * area del programa principal
+                                   ORG     $C000
+  C000 7F 00 00    main            CLR     HH              limpio las horas
+  C003 7F 00 01                    CLR     MM              limpio los minutos
+  C006 7F 00 02                    CLR     SS              limpio los segundos
+  C009 7F 00 03                    CLR     MS              limpio los medio
+.                  segundos o 500 milisegundos
+
+  C00C 8E 00 FF                    LDS     #$00FF          cargo en el stack
+.                  pointer la direccion de inicio de la rutina
+  C00F 4F                          CLRA                    limpio el acumA y lo
+.                  transfiero al CCR para habilitar interrupciones
+  C010 06                          TAP                     esta es la unica
+.                  forma en que puedo poner en cero los flags X e I
+
+  C011 20 FE       fin             BRA     fin
+
+                   * area de la primera rutina de atencion
+                                   ORG     $D000
+  D000 7F 00 00    INICIO          CLR     HH              limpio las horas
+  D003 7F 00 01                    CLR     MM              limpio los minutos
+  D006 7F 00 02                    CLR     SS              limpio los segundos
+  D009 7F 00 03                    CLR     MS              limpio los medio
+.                  segundos o 500 milisegundos
+
+  D00C 3B                          RTI                     retorno el control
+.                  luego de ejecutar rutina de atencion a interrupcion
+
+                   * area de la segunda rutina de atencion
+                                   ORG     $E000
+  E000 7C 00 03    TIC3            INC     MS              incremento los medio
+.                  segundos o 500 milisegundos
+  E003 96 03                       LDAA    MS              cargo los medio
+.                  segundos o 500 milisegundos en el acumA
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       2
+
+  E005 81 01                       CMPA    #1              comparo para ver si
+.                  llego a 1000 milisegundos o 1 segundo
+  E007 27 27                       BEQ     nollego         si no llego, salto
+
+  E009 7F 00 03                    CLR     MS              como llego a 1 seg,
+.                  vuelvo, vuelvo a cero y debo aumentar los segundos
+
+  E00C 7C 00 02                    INC     SS              incremento los
+.                  segundos
+  E00F 96 02                       LDAA    SS              cargo los segundos en
+.                  el acumA
+  E011 81 3C                       CMPA    #60             comparo para ver si
+.                  llego a 60
+  E013 26 1B                       BNE     nollego         si no llego, salto
+
+  E015 7F 00 02                    CLR     SS              como llegue a 60
+.                  segundos, vuelvo a cero y debo aumentar los minutos
+
+  E018 7C 00 01                    INC     MM              incremento los
+.                  minutos
+  E01B 96 01                       LDAA    MM              cargo los minutos en
+.                  el acumA
+  E01D 81 3C                       CMPA    #60             comparo para ver si
+.                  llego a 60
+  E01F 26 0F                       BNE     nollego         si no llego, salto
+
+  E021 7F 00 01                    CLR     MM              como llegue a 60
+.                  minutos, vuelvo a cero y debo aumentar las horas
+
+  E024 7C 00 00                    INC     HH              incremento las horas
+  E027 96 00                       LDAA    HH              cargo las horas el
+.                  acumA
+  E029 81 18                       CMPA    #24             comparo para ver si
+.                  llego a 24
+  E02B 26 03                       BNE     nollego         si no llego, salto
+
+  E02D 7F 00 00                    CLR     HH              como llegue a 24
+.                  horas, vuelvo a cero y comienza un nuevo dia
+
+  E030 3B          nollego         RTI                     retorno el control
+.                  luego de ejecutar rutina de atencion a interrupcion
+
+  Symbol Table 
+
+  NOLLEGO            E030
+  HH                 0000
+  MAIN               C000
+  MM                 0001
+  MS                 0003
+  FIN                C011
+  INICIO             D000
+  SS                 0002
+  TIC3               E000

@@ -1,0 +1,72 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * recorrer un vector contando los ceros, pares y negativos
+                   * conociendo direccion inicial y cantidad de elementos
+                   * vector con elementos de 8 bits
+
+                                   ORG     0000
+                   pares           RMB     1               variables que uso
+.                  como contadores
+                   negas           RMB     1
+                   ceros           RMB     1
+                   cant            EQU     9               cantidad de elementos
+.                  que tiene el vector
+
+                                   ORG     $0010
+  0010 00 01 02 03 vec             DB      00,01,02,03,04,$f1,$81,$80,$90,$a1
+. 0014 04 F1 81 80
+. 0018 90 A1
+
+                                   ORG     $c000
+  C000 C6 09                       LDAB    #cant           cargo a acumB con la
+.                  cantidad de elementos-> lo uso como contador
+  C002 7F 00 00                    CLR     pares
+  C005 7F 00 01                    CLR     negas           limpio los contadores
+  C008 7F 00 02                    CLR     ceros
+  C00B CE 00 10                    LDX     #vec            cargo en el indice X
+.                  la direccion de inicio del vector
+  C00E A6 00       bucle           LDAA    0,x             cargo en acumA el
+.                  contenido de la direccion que tiene el registro indice
+  C010 46                          RORA                    roto a izquierda el
+.                  acumA: LSB-->Cy
+  C011 25 03                       BCS     esImpar         si el carry es cero,
+.                  el numero es impar
+  C013 7C 00 00                    INC     pares           sino, es par-->>
+.                  incremento el contador de pares
+
+  C016 49          esImpar         ROLA                    roto para volver al
+.                  num original: CY-->LSB
+  C017 26 03                       BNE     noCero          como ROLA actualiza
+.                  zero, salto si no es cero
+  C019 7C 00 02                    INC     ceros           si no, es cero-->>
+.                  incremento el contador de ceros
+
+  C01C A6 00       noCero          LDAA    0,x             cargo el acumA el
+.                  contenido de la direccion quei tiene el registro indice
+  C01E 2A 03                       BPL     noNeg           como LDAA actualiza
+.                  N, salto si es positivo
+  C020 7C 00 01                    INC     negas           sino, es negativo-->
+.                  incremento el contador de negativos
+
+  C023 08          noNeg           INX                     voy al siguiente
+.                  elemento del vector
+  C024 5A                          DECB                    decremento al acumB
+.                  en cada pasada
+  C025 26 E7                       BNE     bucle           vuelvo a ejecutar el
+.                  bucle si el acumB no llega a cero
+  C027 20 FE       fin             BRA     fin
+
+  Symbol Table 
+
+  NEGAS              0001
+  PARES              0000
+  CANT               0009
+  BUCLE              C00E
+  VEC                0010
+  NOCERO             C01C
+  ESIMPAR            C016
+  Symbol Table     D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       2
+
+  FIN                C027
+  NONEG              C023
+  CEROS              0002

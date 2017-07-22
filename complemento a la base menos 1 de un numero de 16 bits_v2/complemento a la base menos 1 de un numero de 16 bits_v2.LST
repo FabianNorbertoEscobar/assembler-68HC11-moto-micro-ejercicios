@@ -1,0 +1,32 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * complementar a la base menos (complemento a 1) un numero de
+.                  16 bits
+                   * guardar el resultado en otra direccion de memoria
+
+                           ORG     0000
+                   dirNum  RMB     2               direccion del numero a
+.                  complementar
+                   cbm1    RMB     2               direccion del numero
+.                  complementado
+
+                           ORG     $C000
+  C000 4F                  CLRA                    limpio el acumA
+  C001 5F                  CLRB                    limpio el acumB
+  C002 80 01               SUBA    #1              le resto 1 a acumA para
+.                  ponerlo en FF
+  C004 C0 01               SUBB    #1              le resto 1 a acumB para
+.                  ponerlo en FF
+  C006 90 00               SUBA    dirNum          le resto a la base menos 1 la
+.                  parte alta del numero
+  C008 D0 01               SUBB    dirNum+1        le resto a la base menos 1 la
+.                  parte baja del numero
+  C00A DD 02               STD     cbm1            guarda el numero
+.                  complementado
+  C00C 20 FE       fin     BRA     fin
+
+  Symbol Table 
+
+  DIRNUM             0000
+  CBM1               0002
+  FIN                C00C

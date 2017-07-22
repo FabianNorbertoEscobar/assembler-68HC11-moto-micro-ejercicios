@@ -1,0 +1,49 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * cantidad de ocurrencias de un valor en un vector con
+.                  elementos de 16 bits
+
+                                   ORG     0000
+                   valor           EQU     $F1             valor a buscar en el
+.                  vector
+                   veces           RMB     1               variable que utilizo
+.                  como contador
+
+                                   ORG     $0010
+  0010 01 01 01 02 vec             DW      $0101,$0102,$00f1,$a0f1,$00f1   //
+. 0014 00 F1 A0 F1 inicializo al vector en tiempo de ensamblado
+. 0018 00 F1
+  001A 01          vecFin          DB      1               con esta variable,
+.                  obtengo donde termina el vector
+
+                                   ORG     $C000
+  C000 7F 00 00                    CLR     veces           limpio el contador
+  C003 CE 00 10                    LDX     #vec            cargo en el indice x
+.                  la direccion de inicio del vector
+  C006 EC 00       bucle           LDD     0,x             cargo el regD con el
+.                  contenido de la dir del indice x
+  C008 1A 83 00 F1                 CPD     #valor          comparo al regD
+.                  contra el valor que estoy buscando
+  C00C 26 03                       BNE     noEs            si no son iguales,
+.                  voy al proximo
+  C00E 7C 00 00                    INC     veces           si no, son iguales->
+.                  cuento una aparicion
+
+  C011 08          noEs            INX
+  C012 08                          INX                     incremento dos veces
+.                  el indice x porque las dir son de 16bits
+  C013 8C 00 19                    CPX     #(vecFin-1)     comparo la direccion
+.                  del indiceX contra la dir de fin
+  C016 25 EE                       BLO     bucle           si < vuelvo a
+.                  ejecutar el bucle
+  C018 20 FE       fin             BRA     fin
+
+  Symbol Table 
+
+  NOES               C011
+  BUCLE              C006
+  VEC                0010
+  VECFIN             001A
+  FIN                C018
+  VECES              0000
+  VALOR              00F1

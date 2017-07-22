@@ -1,0 +1,30 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                           ORG     $C000
+  C000 F6 25 25    main    LDAB    $2525
+  C003 EC E1               LDD     225,x
+                           LDAB    #$2525
+E                                   ^ The value of this expression must fit in 8
+.                                     bits.
+                           LDAB    #$2525
+E                                   ^ The value of this expression must fit in 8
+.                                     bits.
+  C005 CC 25 25            LDD     #$2525
+  C008 8B EA               ADDA    #$EA
+  C00A 9B EA               ADDA    $EA
+                           ADDA    $EEAA,x
+E                                  ^ The value of this expression must fit in 8
+.                                    bits.
+  C00C BB 46 EA            ADDA    $46EA
+                           BCC     $100
+E                                  ^ The offset must fit in 8 bits.
+                           BGE     100
+E                                  ^ The offset must fit in 8 bits.
+                           BSR     #$65
+E                                   ^ Immediate addressing mode is not allowed
+.                                     here.
+  C00F 81 1A               CMPA    #26
+
+  Symbol Table 
+
+  MAIN               C000

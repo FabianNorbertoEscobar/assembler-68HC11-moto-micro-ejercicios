@@ -1,0 +1,50 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * contar multiplos de 2 o de 4 que tiene un vector
+                   * conozco la cantidad de elementos que tiene el vector
+                   * el vector se define en tiempo de ensamblado
+
+                           ORG     0000
+                   mult2   RMB     1       cantidad de multiplos de 2
+                   mult4   RMB     1       cantidad de multiplos de 4
+                   cant    EQU     $0A     cantidad de elementos del vector
+
+                           ORG     $0010
+  0010 00 01 02 03 vec     DB      00,01,02,03,04,05,06,07,08,09
+. 0014 04 05 06 07
+. 0018 08 09
+
+                           ORG     $C000
+  C000 C6 0A               LDAB    #cant   cargo la cantidad de elementos del
+.                  vector en acumB
+  C002 7F 00 00            CLR     mult2   limpio el contador
+  C005 7F 00 01            CLR     mult4   limpio el contador
+  C008 CE 00 10            LDX     #vec    cargo la direccion de inicio del
+.                  array en el indice x
+
+  C00B A6 00       bucle   LDAA    0,x     cargo el contenido de la dir del reg
+.                  indice x en acumA
+  C00D 44                  LSRA            muevo el LSB al cy
+  C00E 25 09               BCS     noEs    si cy no es 0, no es multiplo de 2
+  C010 7C 00 00            INC     mult2   cuento un multiplo de 2 encontrado
+  C013 44                  LSRA            muevo el LSB al cy
+  C014 25 03               BCS     noEs    si cy no es 0, no es multiplo de 4
+  C016 7C 00 01            INC     mult4   cuento un multiplo de 4 encontrado
+
+
+  C019 08          noEs    INX             incremento el contenido del indice x
+  C01A 5A                  DECB            decremento el acumB, contador de
+.                  elementos del vector
+  C01B 26 EE               BNE     bucle   si no llega a cero, vuelvo a ejecutar
+.                  el bucle
+  C01D 20 FE       fin     BRA     fin
+
+  Symbol Table 
+
+  NOES               C019
+  MULT2              0000
+  MULT4              0001
+  CANT               000A
+  BUCLE              C00B
+  VEC                0010
+  FIN                C01D

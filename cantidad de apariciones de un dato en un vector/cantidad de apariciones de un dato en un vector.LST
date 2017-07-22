@@ -1,0 +1,49 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * cantidad de apariciones de un elemento en un vector
+
+                                   ORG     $0000
+  0000 01 00       CANT            DW      256             cantidad de elementos
+.                  del vector
+                   PUNT            RMB     2               direccion de inicio
+.                  del vector
+                   DATO            RMB     1               dato buscado
+                   VECES           RMB     1               cantidad de
+.                  apariciones del dato buscado en el vector
+
+                                   ORG     $C000
+  C000 7F 00 05                    CLR     VECES           pongo en cero el
+.                  contador de la cantidad de apariciones del dato buscado en el
+.                  vector
+  C003 D6 00                       LDAB    CANT            cargo la cantidad de
+.                  elementos en acumB
+  C005 DE 02                       LDX     PUNT            cargo la direccion de
+.                  inicio del vector en el registro ndice X
+
+  C007 A6 00       loop            LDAA    0,x             cargo el elemento de
+.                  esa posicion del vector en el acumA
+  C009 91 04                       CMPA    DATO            lo comparo contra el
+.                  dato buscado
+  C00B 26 03                       BNE     sig             si no es, paso al
+.                  siguiente elemento del vector
+  C00D 7C 00 05                    INC     VECES           cuento la aparicion
+.                  del dato buscado en el vector
+
+  C010 08          sig             INX                     muevo el puntero del
+.                  vector al siguiente elemento
+  C011 5A                          DECB                    decremento la
+.                  cantidad de elementos del vector que falta analizar
+  C012 26 F3                       BNE     loop            si no llego a cero,
+.                  entonces analizo otro elemento del vector
+
+  C014 20 FE       fin             BRA     fin
+
+  Symbol Table 
+
+  PUNT               0002
+  CANT               0000
+  FIN                C014
+  SIG                C010
+  VECES              0005
+  LOOP               C007
+  DATO               0004

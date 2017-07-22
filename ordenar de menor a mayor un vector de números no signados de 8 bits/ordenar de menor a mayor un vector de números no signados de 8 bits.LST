@@ -1,0 +1,65 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * ordenar de menor a mayor un vector de numero no signados de
+.                  8 bits
+                   * se conoce la direccion inicial del vector y la cantidad de
+.                  elementos
+
+                           ORG     0000
+                   dirIni  RMB     2       direccion de inicio del vector
+                   cant    RMB     1       cantidad de elementos del vector
+                   dirFin  RMB     2       direccion de fin del vector <--- la
+.                  calculo yo
+
+                           ORG     $C000
+  C000 DC 00               LDD     dirIni  cargo la direccion de inicio del
+.                  vector en el regD
+  C002 DB 02               ADDB    cant    le sumo la cantidad de elementos que
+.                  tiene el vector
+  C004 DD 03               STD     dirFin  almaceno el resultado --> direccion
+.                  de fin del vector
+  C006 18 DE 00            LDY     dirIni  cargo la direccion de inicio en el
+.                  indice Y
+
+  C009 DE 00       bucExt  LDX     dirIni  cargo la direccion de inicio en el
+.                  indice X
+
+  C00B A6 00       bucInt  LDAA    0,x     cargo el contenido de la dir de ind x
+.                  en acumA
+  C00D A1 01               CMPA    1,x     lo comparo contra el siguiente del
+.                  vector
+  C00F 23 06               BLS     sig     si lo de acumA es menor o igual,
+.                  salto al siguiente
+
+  C011 E6 01               LDAB    1,x     si no, intercambio. Cargo el
+.                  siguiente en acumB
+  C013 A7 01               STAA    1,x     almaceno el anterior en la direccion
+.                  del siguiente
+  C015 E7 00               STAB    0,x     almaceno el siguiente en la direccion
+.                  del anterior
+
+  C017 08          sig     INX             incremento el indice X --> paso al
+.                  siguiente
+  C018 9C 03               CPX     dirFin  comparo al indX contra direccion de
+.                  fin para no caerme
+  C01A 26 EF               BNE     bucInt  si no ZERO, vuelvo a ejecutar el
+.                  bucle interno-> sig
+
+  C01C 18 08               INY             incremento el indice Y --> el primero
+.                  queda ordenado
+  C01E 18 9C 03            CPY     dirFin  comparo al indY contra direccion de
+.                  fin para no caerme
+  C021 26 E6               BNE     bucExt  si no ZERO, vuelvo a ejecutar el
+.                  bucle externo->pasada
+
+  C023 20 FE       fin     BRA     fin
+
+  Symbol Table 
+
+  BUCINT             C00B
+  DIRFIN             0003
+  DIRINI             0000
+  BUCEXT             C009
+  CANT               0002
+  FIN                C023
+  SIG                C017

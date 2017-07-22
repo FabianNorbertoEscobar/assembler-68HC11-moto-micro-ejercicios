@@ -1,0 +1,15 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * contador de 16 bits, que cuenta desde cero hasta volver a
+.                  llegar a cero
+
+                           ORG     $C000
+  C000 DF 00               STX     0
+  C002 08          loop    INX
+  C003 26 FD               BNE     loop
+  C005 20 FE       fin     BRA     fin
+
+  Symbol Table 
+
+  FIN                C005
+  LOOP               C002

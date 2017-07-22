@@ -1,0 +1,75 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * buscar mayor elemento de un vector, su direccion y la
+.                  cantidad de ocurrencias
+
+                                   ORG     $0000
+                   CANT            RMB     1               cantidad de elementos
+.                  del vector
+                   PUNT            RMB     2               direccion de inicio
+.                  del vector
+                   MAYOR           RMB     1               mayor elemento del
+.                  vector
+                   DIR             RMB     2               direccion del mayor
+                   VECES           RMB     1               cantidad de
+.                  apariciones del mayor
+
+                                   ORG     $C000
+  C000 7F 00 06    main            CLR     VECES           limpio el contador de
+.                  ocurrencias
+  C003 7C 00 06                    INC     VECES           cuento al primero, el
+.                  mayor
+
+  C006 D6 00                       LDAB    CANT            cargo la cantidad de
+.                  elementos del vector en el acumB
+  C008 DE 01                       LDX     PUNT            cargo la direccion de
+.                  inicio del vector en el indice X
+
+  C00A DF 04                       STX     DIR             la direccion del
+.                  primero es la direccion del mayor
+  C00C 20 12                       BRA     sig             no debo comparar al
+.                  primero
+
+  C00E A6 00       loop            LDAA    0,x             cargo el elemento de
+.                  la posicion apuntada por el indice X en el acumA
+  C010 91 03                       CMPA    MAYOR           lo comparo contra el
+.                  mayor
+
+  C012 25 0C                       BLO     sig             si es menor, paso al
+.                  siguiente
+  C014 27 07                       BEQ     appear          si es igual, nueva
+.                  ocurrencia
+
+  C016 97 03                       STAA    MAYOR           reemplazo el mayor
+.                  por el nuevo mayor
+  C018 DF 04                       STX     DIR             cargo la direccion
+.                  del mayor con la direccion apuntada por el indice X
+
+  C01A 7F 00 06                    CLR     VECES           pongo en cero la
+.                  cantidad de ocurrencias del mayor
+
+  C01D 7C 00 06    appear          INC     VECES           cuento la ocurrencia
+
+  C020 08          sig             INX                     paso al siguiente
+.                  elemento del vector
+  C021 5A                          DECB                    decremento la
+.                  cantidad de elementos del vector que falta analizar
+
+  C022 26 EA                       BNE     loop            si no llego a cero,
+.                  sigo dentro del loop
+  C024 20 FE       fin             BRA     fin
+
+  Symbol Table 
+
+  DIR                0004
+  PUNT               0001
+  CANT               0000
+  MAYOR              0003
+  Symbol Table     D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       2
+
+  APPEAR             C01D
+  MAIN               C000
+  FIN                C024
+  SIG                C020
+  VECES              0006
+  LOOP               C00E

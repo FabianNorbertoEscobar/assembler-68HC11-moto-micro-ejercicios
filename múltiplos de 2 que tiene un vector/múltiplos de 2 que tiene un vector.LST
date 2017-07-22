@@ -1,0 +1,35 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * contar multiplos de 2 que tiene un vector
+
+                           ORG     0000
+                   dirIni  RMB     2       direccion de inicio del vector
+                   dirFin  RMB     2       direccion de fin del vector
+                   mult2   RMB     1       cantidad de multiplos de 2
+
+                           ORG     $C000
+  C000 7F 00 04            CLR     mult2   limpio el contador
+  C003 DE 00               LDX     dirIni  cargo la direccion inicial del vector
+.                  en el reg indice x
+  C005 A6 00       bucle   LDAA    0,x     cargo en acumA el contenido de la
+.                  direccion del indice x
+  C007 84 01               ANDA    #01     si contenido de acumA es par,
+.                  entonces AND da cero
+  C009 26 03               BNE     noEs    salto si esto no ocurre
+  C00B 7C 00 04            INC     mult2   cuento un multiplo
+  C00E 08          noEs    INX             incremento contenido del registro
+.                  indice x
+  C00F 9C 02               CPX     dirFin  comparo con la direccion final para
+.                  no caermne del vector
+  C011 25 F2               BLO     bucle   si no termine, vuelvo a ejecutar el
+.                  bucle
+  C013 20 FE       fin     BRA     fin
+
+  Symbol Table 
+
+  NOES               C00E
+  DIRFIN             0002
+  DIRINI             0000
+  MULT2              0004
+  BUCLE              C005
+  FIN                C013

@@ -1,0 +1,51 @@
+  ADDR B1 B2 B3 B4 thrass11.tmp                                     PAGE       1
+
+                   * recorrer un vector con numeros de 8 bits y sumarlos
+.                  (trabajando con no signados)
+
+                                   ORG     0000
+                   suma            RMB     2               reservo 2bytes por si
+.                  me paso de 255
+
+                                   ORG     $0010
+  0010 02 04 05 FA vector          DB      02,04,05,$FA,$30,$90,$10        //la
+. 0014 30 90 10    suma deberia dar 1D5
+  0017 01          rotcev          DB      1               reservo dummy para la
+.                  direccion final
+
+                                   ORG     $C000
+  C000 7F 00 00                    CLR     suma            limpio la parte alta
+.                  y la parte baja de la variable suma
+  C003 7F 00 01                    CLR     suma+1          (esta limnpieza no es
+.                  necesaria porque luego piso estos valores)
+  C006 CE 00 10                    LDX     #vector         cargo en el indice X
+.                  la direccion de inicio del vector
+  C009 86 00                       LDAA    #0              la parte alta la
+.                  pongo en cero porque estoy sumando numeros de 8bits
+  C00B E6 00                       LDAB    0,x             en la parte baja
+.                  almaceno el numero que deseo sumar
+  C00D DD 00                       STD     suma            al primer sumando lo
+.                  almaceno en suma
+  C00F 08          bucle           INX                     voy al siguiente
+.                  elemento del vector
+  C010 86 00                       LDAA    #0              la parte alta la
+.                  pongo en cero porque estoy sumando numeros de 8 bits
+  C012 E6 00                       LDAB    0,x             en la parte baja
+.                  almaceno ek numero que deseo sumar
+  C014 D3 00                       ADDD    suma            sumo al regD lo que
+.                  tiene la suma y almaceno en regD
+  C016 DD 00                       STD     suma            luego, llevo esto a
+.                  memoria
+  C018 8C 00 16                    CPX     #(rotcev-1)     comparo al indice X
+.                  con la direccion del ultimo elemento del vector
+  C01B 25 F2                       BLO     bucle           si es < ejecuto
+.                  nuevamente el bucle
+  C01D 20 FE       fin             BRA     fin
+
+  Symbol Table 
+
+  SUMA               0000
+  VECTOR             0010
+  BUCLE              C00F
+  FIN                C01D
+  ROTCEV             0017

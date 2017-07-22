@@ -1,0 +1,29 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * numero mayor, igual o menor que 128
+
+                           ORG     $C000
+  C000 96 00               LDAA    $00
+  C002 81 80               CMPA    #128
+
+  C004 22 08               BHI     mayor
+  C006 25 0C               BLO     menor
+
+  C008 86 3D               LDAA    #'=
+  C00A 97 01               STAA    $01
+
+  C00C 20 FE       fin     BRA     fin
+
+  C00E 86 3E       mayor   LDAA    #'>
+  C010 97 01               STAA    $01
+  C012 20 F8               BRA     fin
+
+  C014 86 3C       menor   LDAA    #'<
+  C016 97 01               STAA    $01
+  C018 20 F2               BRA     fin
+
+  Symbol Table 
+
+  MENOR              C014
+  MAYOR              C00E
+  FIN                C00C

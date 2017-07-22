@@ -1,0 +1,48 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * buscar minimo de un array de numeros signados de 8 bits
+                   * se conocen la cantidad de elementos del vector y la
+.                  direccion de fin
+
+                           ORG     0000
+                   cant    RMB     1               cantidad de elementos del
+.                  array
+                   dirFin  RMB     2               direccion final del array
+                   min     RMB     1               minimo valor del array
+
+                           ORG     $C000
+  C000 DE 01               LDX     dirFin          cargo la anteultima direccion
+.                  del array en regX
+  C002 A6 00               LDAA    0,x             cargo en el acumA el
+.                  contenido de la dir del reg indice x
+  C004 97 03               STAA    min             considero al primer elemento
+.                  como el minimo
+  C006 D6 00               LDAB    cant            cargo al acumB con la
+.                  cantidad de elementos del array menos uno
+  C008 5A                  DECB                    decremento el acumB
+  C009 09                  DEX                     decremento el indice x
+
+  C00A A6 00       bucle   LDAA    0,x             cargo el contenido de la dir
+.                  del reg ind x en el acumA
+  C00C 91 03               CMPA    min             comparo dicho numero contra
+.                  el minimo
+  C00E 2E 02               BGT     sig             si es mayor o igual, salto
+  C010 97 03               STAA    min             sino, es el nuevo minimo-->
+.                  lo almaceno
+
+  C012 09          sig     DEX                     decremento el registro indice
+  C013 5A                  DECB    cant            decremento acumB->la cantidad
+.                  de elementos a recorrer
+  C014 26 F4               BNE     bucle           si no llego a cero, entonces
+.                  ejecuto el bucle
+
+  C016 20 FE       fin     BRA     fin
+
+  Symbol Table 
+
+  DIRFIN             0001
+  CANT               0000
+  BUCLE              C00A
+  FIN                C016
+  SIG                C012
+  MIN                0003

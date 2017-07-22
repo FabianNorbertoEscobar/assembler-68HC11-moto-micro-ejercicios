@@ -1,0 +1,19 @@
+	ORG	$C000
+
+main	LDAB	#$25
+	LDAB	$25
+	LDAB	25
+	LDAB	$2525
+	LDAB	$25,x
+
+	ADDA	#$EA
+	ADDA	$EA
+	ADDA	$EA,x
+	ADDA	$46EA
+
+	CBA
+	BCC	$10
+	BGE	$F7
+	BSR	$65
+
+fin	BRA	fin

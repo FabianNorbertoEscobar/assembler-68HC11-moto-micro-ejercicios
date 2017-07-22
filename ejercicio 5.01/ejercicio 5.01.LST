@@ -1,0 +1,29 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                           ORG     $C000
+
+  C000 C6 25       main    LDAB    #$25
+  C002 D6 25               LDAB    $25
+  C004 D6 19               LDAB    25
+  C006 F6 25 25            LDAB    $2525
+  C009 E6 25               LDAB    $25,x
+
+  C00B 8B EA               ADDA    #$EA
+  C00D 9B EA               ADDA    $EA
+  C00F AB EA               ADDA    $EA,x
+  C011 BB 46 EA            ADDA    $46EA
+
+  C014 11                  CBA
+                           BCC     $10
+E                                  ^ The offset must fit in 8 bits.
+                           BGE     $F7
+E                                  ^ The offset must fit in 8 bits.
+                           BSR     $65
+E                                  ^ The offset must fit in 8 bits.
+
+  C015 20 FE       fin     BRA     fin
+
+  Symbol Table 
+
+  MAIN               C000
+  FIN                C015

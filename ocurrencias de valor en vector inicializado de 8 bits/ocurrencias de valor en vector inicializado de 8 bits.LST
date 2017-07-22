@@ -1,0 +1,47 @@
+  ADDR B1 B2 B3 B4 thrass11.tmp                                     PAGE       1
+
+                   * cantidad de ocurrencias de un valor en un vector de
+.                  elementos de 8 bits
+
+                                   ORG     0000
+                   valor           EQU     $f1             valor a buscar en el
+.                  vector
+                   veces           RMB     1               variable que uso como
+.                  contador
+
+                                   ORG     $0010
+  0010 01 02 03 04 vec             DB      01,02,03,04,05,$f1,$a0,$f1,$f1,$f3
+. 0014 05 F1 A0 F1
+. 0018 F1 F3
+  001A 01          vecFin          DB      1
+
+                                   ORG     $C000
+  C000 7F 00 00                    CLR     veces           limpio el contador
+  C003 CE 00 10                    LDX     #vec            cargo en el indice X
+.                  la direccion de inicio del vector
+  C006 A6 00       bucle           LDAA    0,x             cargo contenido de
+.                  direccion del indice x en acumA
+  C008 81 F1                       CMPA    #valor          comparo acumA contra
+.                  el valor buscado
+  C00A 26 03                       BNE     noEs            si no son iguales,
+.                  paso al proximo
+  C00C 7C 00 00                    INC     veces           sino, son iguales->>
+.                  cuento aparicion
+
+  C00F 08          noEs            INX                     incremento el indice
+.                  X -> voy al proximo
+  C010 8C 00 19                    CPX     #(vecFin-1)     comparo indice X
+.                  contra direccion final
+  C013 23 F1                       BLS     bucle           si < vuelvo a
+.                  ejecutar el bucle
+  C015 20 FE       fin             BRA     fin
+
+  Symbol Table 
+
+  NOES               C00F
+  BUCLE              C006
+  VEC                0010
+  VECFIN             001A
+  FIN                C015
+  VECES              0000
+  VALOR              00F1

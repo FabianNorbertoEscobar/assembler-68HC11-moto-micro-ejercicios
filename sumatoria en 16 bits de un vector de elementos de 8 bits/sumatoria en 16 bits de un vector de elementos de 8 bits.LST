@@ -1,0 +1,40 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * sumatoria en 16 bits de un vector de elementos de 8 bits
+
+                           ORG     0000
+                   dirIni  RMB     2       direccion inicial del vector
+                   cant    RMB     1       cantidad de elementos que tiene el
+.                  vector
+                   suma    RMB     2       suma en 16 bits
+
+                           ORG     $C000
+  C000 7F 00 03            CLR     suma    limpio la parte alta del resultado de
+.                  la suma
+  C003 7F 00 04            CLR     suma+1  limpio la parte baja del resultado de
+.                  la suma
+  C006 DE 00               LDX     dirIni  cargo en el reg indice X la direccion
+.                  de inicio del vector
+
+  C008 4F          bucle   CLRA            limpio la parte alta del registro D
+  C009 E6 00               LDAB    0,x     cargo en la parte baja del registro D
+.                  el contenido de la dir del indX
+  C00B D3 03               ADDD    suma    le sumo al registro D lo que contiene
+.                  suma
+  C00D DD 03               STD     suma    almaceno la nueva suma que contiene
+.                  el regD en los bytes de la suma
+  C00F 08                  INX             incremento la direccion del registro
+.                  indice x
+  C010 7A 00 02            DEC     cant    decremento la cantidad de elementos
+.                  que falta sumar
+  C013 26 F3               BNE     bucle   si la cantidad no llega a cero,
+.                  vuelvo a ejecutar el bucle
+  C015 20 FE       fin     BRA     fin
+
+  Symbol Table 
+
+  SUMA               0003
+  DIRINI             0000
+  CANT               0002
+  BUCLE              C008
+  FIN                C015

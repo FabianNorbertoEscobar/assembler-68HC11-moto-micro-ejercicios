@@ -1,0 +1,35 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * contar multiplos de 4 que tiene un vector
+
+                           ORG     0000
+                   dirIni  RMB     2       direccion de inicio del vector
+                   dirFin  RMB     2       direccion de fin del vector
+                   mult4   RMB     1       1
+
+                           ORG     $C000
+  C000 7F 00 04            CLR     mult4   limpio el contador
+  C003 DE 00               LDX     dirIni  cargo en el reg indice x la primera
+.                  direccion del vector
+  C005 A6 00       bucle   LDAA    0,x     cargo el contenido de la dir del reg
+.                  indice x en acumA
+  C007 44                  LSRA            muevo el LSB al carry
+  C008 25 06               BCS     noEs    si cy no es cero, no es multiplo de 4
+  C00A 44                  LSRA            muevo el nuevo LSB al carry
+  C00B 25 03               BCS     noEs    si cy no es cero, no es multiplo de 4
+  C00D 7C 00 04            INC     mult4   cuento un multiplo de 4 encontrado
+  C010 08          noEs    INX             incremento el indice x
+  C011 9C 02               CPX     dirFin  comparo contra la dir de fin para no
+.                  caerme del vector
+  C013 25 F0               BLO     bucle   si no termine, vuelvo a ejecutar el
+.                  bucle
+  C015 20 FE       fin     BRA     fin
+
+  Symbol Table 
+
+  NOES               C010
+  DIRFIN             0002
+  DIRINI             0000
+  MULT4              0004
+  BUCLE              C005
+  FIN                C015

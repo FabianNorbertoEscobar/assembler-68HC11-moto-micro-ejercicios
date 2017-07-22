@@ -1,0 +1,27 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * suma s=p+q-r
+
+                           ORG     $0000
+                   s       RMB     1
+  0001 05          p       DB      05
+  0002 03          q       DB      03
+  0003 02          r       DB      02
+
+                           ORG     $C000
+  C000 4F          main    CLRA
+  C001 96 01               LDAA    p
+  C003 9B 02               ADDA    q
+  C005 90 03               SUBA    r
+  C007 97 00               STAA    s
+  C009 20 FE       fin     BRA     fin
+
+
+  Symbol Table 
+
+  P                  0001
+  Q                  0002
+  R                  0003
+  S                  0000
+  MAIN               C000
+  FIN                C009

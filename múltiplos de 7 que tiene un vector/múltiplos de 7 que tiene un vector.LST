@@ -1,0 +1,46 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * contar los multiplos de 7 que tiene un vector
+
+                           ORG     0000
+                   mult7   RMB     1       cuenta la cantidad de multiplos de 7
+
+                           ORG     $0010
+  0010 02 06 07 15 vec     DB      $02,$06,$07,$15,$18,$0E,$23,$49,$1C,$32,$2A,
+. 0014 18 0E 23 49 $48,$54,$a1
+. 0018 1C 30 2A 48
+. 001C 54 A1
+  001E 01          finVec  DB      1       primera direccion de memoria fuera
+.                  del vector
+
+                           ORG     $C000
+  C000 7F 00 00            CLR     mult7   limpio el contador
+  C003 18 CE 00 10         LDY     #vec    cargo en el reg indice Y la dir de
+.                  inicio del vector
+
+  C007 18 E6 00    bucle   LDAB    0,y     cargo en parte baja de regD el cont
+.                  de la dir del indice Y
+  C00A 4F                  CLRA            limpio la parte alta de regD
+  C00B CE 00 07            LDX     #07     cargo el divisor en el reg indice x
+  C00E 02                  IDIV            divido D/x: resultado--> IX
+.                  resto-->D
+  C00F 1A 83 00 00         CPD     #0      comparo regD contra 01. si cero es
+.                  multiplo
+  C013 26 03               BNE     noEs    salto si no es multiplo
+  C015 7C 00 00            INC     mult7   cuento un multiplo de 7 encontrado
+
+  C018 18 08       noEs    INY             incremento la dir del reg indice Y
+  C01A 18 8C 00 1D         CPY     #(finVec-1)     comparo contra la direccion
+.                  de fin de Y
+  C01E 25 E7               BLO     bucle   si no me he caido del vector, ejecuto
+.                  el bucle
+  C020 20 FE       fin     BRA     fin
+
+  Symbol Table 
+
+  NOES               C018
+  MULT7              0000
+  BUCLE              C007
+  VEC                0010
+  FIN                C020
+  FINVEC             001E

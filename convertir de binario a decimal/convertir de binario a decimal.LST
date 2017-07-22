@@ -1,0 +1,61 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * convertir de binario a decimal
+
+                                   ORG     $0000
+                   NUMERO          RMB     1               numero binario a
+.                  convertir
+
+                                   ORG     $0012
+                   CENTENAS        RMB     1               centenas del numero
+.                  convertido
+                   DECENAS         RMB     1               decenas del numero
+.                  convertido
+                   UNIDADES        RMB     1               unidades del numero
+.                  convertido
+
+                                   ORG     $C000
+  C000 7F 00 12                    CLR     CENTENAS        inicializo las
+.                  centenas
+  C003 7F 00 13                    CLR     DECENAS         inicializo las
+.                  decenas
+
+  C006 96 00                       LDAA    NUMERO          cargo el numero en
+.                  acumA
+
+  C008 80 64       loopCentenas    SUBA    #100            le resto 100
+  C00A 2D 05                       BLT     finCentenas     si acumA es menor a
+.                  cero, no hay mas centenas
+  C00C 7C 00 12                    INC     CENTENAS        cuento una centena
+  C00F 20 F7                       BRA     loopCentenas    vuelvo a comenzar el
+.                  loop de las centenas
+
+  C011 8B 64       finCentenas     ADDA    #100            sumo 100 porque me
+.                  pase
+
+  C013 80 0A       loopDecenas     SUBA    #10             le resto 10
+  C015 2D 05                       BLT     finDecenas      si acumAes menor a
+.                  cero, no hay mas decenas
+  C017 7C 00 13                    INC     DECENAS         cuento una decena
+  C01A 20 F7                       BRA     loopDecenas     vuelvo a comenzar el
+.                  loop de las decenas
+
+  C01C 8B 0A       finDecenas      ADDA    #10             sumo 10 porque me
+.                  pase
+
+  C01E 97 14                       STAA    UNIDADES        lo restante son las
+.                  unidades
+
+  C020 20 FE       fin             BRA     fin
+
+  Symbol Table 
+
+  FINCENTENAS        C011
+  DECENAS            0013
+  NUMERO             0000
+  FINDECENAS         C01C
+  CENTENAS           0012
+  UNIDADES           0014
+  LOOPDECENAS        C013
+  LOOPCENTENAS       C008
+  FIN                C020

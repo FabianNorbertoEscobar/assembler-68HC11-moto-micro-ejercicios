@@ -1,0 +1,44 @@
+  ADDR B1 B2 B3 B4 thrass11.tmp                                     PAGE       1
+
+                   * cantidad de ocurrencias de un valor en un vector con
+.                  elementos de 16 bits
+
+                                   ORG     0000
+                   valor           EQU     $F1             valor a buscar en el
+.                  vector
+                   dirIni          RMB     2               direccion de inicio
+.                  del vector
+                   dirFin          RMB     2               direccion de fin del
+.                  vector
+                   veces           RMB     1               variable que utilizo
+.                  como contador
+
+                                   ORG     $C000
+  C000 7F 00 04                    CLR     veces           limpio el contador
+  C003 EC 00       bucle           LDD     0,x             cargo el regD con el
+.                  contenido de la dir del indice x
+  C005 1A 83 00 F1                 CPD     #valor          comparo al regD
+.                  contra el valor que estoy buscando
+  C009 26 03                       BNE     noEs            si no son iguales,
+.                  voy al proximo
+  C00B 7C 00 04                    INC     veces           si no, son iguales->
+.                  cuento una aparicion
+
+  C00E 08          noEs            INX
+  C00F 08                          INX                     incremento dos veces
+.                  el indice x porque las dir son de 16bits
+  C010 9C 02                       CPX     dirFin          comparo la direccion
+.                  del indiceX contra la dir de fin
+  C012 25 EF                       BLO     bucle           si < vuelvo a
+.                  ejecutar el bucle
+  C014 20 FE       fin             BRA     fin
+
+  Symbol Table 
+
+  NOES               C00E
+  DIRFIN             0002
+  DIRINI             0000
+  BUCLE              C003
+  FIN                C014
+  VECES              0004
+  VALOR              00F1

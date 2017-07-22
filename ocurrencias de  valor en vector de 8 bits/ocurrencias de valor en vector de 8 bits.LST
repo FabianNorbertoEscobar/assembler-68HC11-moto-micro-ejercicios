@@ -1,0 +1,43 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * cantidad de ocurrencias de un valor en un vector de
+.                  elementos de 8 bits
+
+                                   ORG     0000
+                   valor           EQU     7               valor a buscar en el
+.                  vector
+                   dirIni          RMB     2               direccion de inicio
+.                  del vector
+                   dirFin          RMB     2               direccion de fin del
+.                  vector
+                   veces           RMB     1               variable que uso como
+.                  contador
+
+                                   ORG     $C000
+  C000 7F 00 04                    CLR     veces           limpio el contador
+  C003 A6 00       bucle           LDAA    0,x             cargo contenido de
+.                  direccion del indice x en acumA
+  C005 81 07                       CMPA    #valor          comparo acumA contra
+.                  el valor buscado
+  C007 26 03                       BNE     noEs            si no son iguales,
+.                  paso al proximo
+  C009 7C 00 04                    INC     veces           sino, son iguales->>
+.                  cuento aparicion
+
+  C00C 08          noEs            INX                     incremento el indice
+.                  X -> voy al proximo
+  C00D 9C 02                       CPX     dirFin          comparo indice X
+.                  contra direccion final
+  C00F 25 F2                       BLO     bucle           si < vuelvo a
+.                  ejecutar el bucle
+  C011 20 FE       fin             BRA     fin
+
+  Symbol Table 
+
+  NOES               C00C
+  DIRFIN             0002
+  DIRINI             0000
+  BUCLE              C003
+  FIN                C011
+  VECES              0004
+  VALOR              0007

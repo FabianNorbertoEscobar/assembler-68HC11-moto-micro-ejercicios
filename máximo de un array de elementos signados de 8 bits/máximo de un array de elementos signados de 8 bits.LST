@@ -1,0 +1,48 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * buscar maximo de un array de numeros no signados de 8 bits
+                   * se conocen la cantidad de elementos del vector y la
+.                  direccion de fin
+
+                           ORG     0000
+                   cant    RMB     1               cantidad de elementos del
+.                  array
+                   dirFin  RMB     2               direccion final del array
+                   max     RMB     1               maximo valor del array
+
+                           ORG     $C000
+  C000 DE 01               LDX     dirFin          cargo la anteultima direccion
+.                  del array en regX
+  C002 A6 00               LDAA    0,x             cargo en el acumA el
+.                  contenido de la dir del reg indice x
+  C004 97 03               STAA    max             considero al primer elemento
+.                  como el maximo
+  C006 D6 00               LDAB    cant            cargo al acumB con la
+.                  cantidad de elementos del array menos uno
+  C008 5A                  DECB                    decremento el acumB
+  C009 09                  DEX                     decremento el indice x
+
+  C00A A6 00       bucle   LDAA    0,x             cargo el contenido de la dir
+.                  del reg ind x en el acumA
+  C00C 91 03               CMPA    max             comparo dicho numero contra
+.                  el maximo
+  C00E 2D 02               BLT     sig             si es menor o igual, salto
+  C010 97 03               STAA    max             sino, es el nuevo maximo-->
+.                  lo almaceno
+
+  C012 09          sig     DEX                     decremento el registro indice
+  C013 5A                  DECB    cant            decremento acumB->la cantidad
+.                  de elementos a recorrer
+  C014 26 F4               BNE     bucle           si no llego a cero, entonces
+.                  ejecuto el bucle
+
+  C016 20 FE       fin     BRA     fin
+
+  Symbol Table 
+
+  DIRFIN             0001
+  CANT               0000
+  MAX                0003
+  BUCLE              C00A
+  FIN                C016
+  SIG                C012

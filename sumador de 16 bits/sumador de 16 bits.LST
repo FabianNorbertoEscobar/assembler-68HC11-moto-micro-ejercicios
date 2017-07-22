@@ -1,0 +1,36 @@
+  ADDR B1 B2 B3 B4 thrass11.tmp                                     PAGE       1
+
+                   * suma en 16 bits
+
+                                   ORG             0000
+  0000 80          dato1           DB              $80             defino los
+.                  datos en hexadecimal
+  0001 87          dato2           DB              $87
+                   resul           RMB             2               reservo dos
+.                  bytes para guardar el resultado
+
+                                   ORG             $C000
+  C000 7F 00 02    main            CLR             resul           limpio la
+.                  memoria reservada para el resultado
+  C003 96 00                       LDAA            dato1           grabo el
+.                  primer sumando en el acumA
+  C005 D6 01                       LDAB            dato2           grabo el
+.                  segundo sumando en el acumB
+  C007 1B                          ABA                             sumo los
+.                  acumuladores y asigno en acumA
+  C008 24 03                       BCC             noCy            salto si no
+.                  hay carry
+  C00A 7C 00 02                    INC             resul           si carry,
+.                  incremento la parte alta del resultado
+  C00D 97 03       noCy            STAA            resul+1         almaceno el
+.                  acumA en la parte baja del resultado
+  C00F 20 FE       fin             BRA             fin
+
+  Symbol Table 
+
+  DATO1              0000
+  DATO2              0001
+  MAIN               C000
+  RESUL              0002
+  FIN                C00F
+  NOCY               C00D

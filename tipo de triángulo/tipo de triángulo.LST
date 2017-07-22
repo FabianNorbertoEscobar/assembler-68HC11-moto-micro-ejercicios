@@ -1,0 +1,75 @@
+  ADDR B1 B2 B3 B4 thrass11.tmp                                     PAGE       1
+
+                   * TIPO DE TRIANGULO
+                   * dados los lados de un triangulo, determinar que tipo de
+.                  triangulo es:
+                   * Q (equilatero),       I (isosceles)           o       E
+.                  (escaleno)
+
+                                   ORG             0000
+                   lado1           RMB             1               reservo
+.                  memoria para los lados del triangulo
+                   lado2           RMB             1
+                   lado3           RMB             1
+                   tipoT           RMB             1               aqui indicare
+.                  el tipo de triangulo
+
+                                   ORG             $C000
+  C000 96 00       main            LDAA            lado1           almaceno el
+.                  lado1 en acumA
+  C002 91 01                       CMPA            lado2           comparo el
+.                  acumA contra el lado2
+  C004 26 06                       BNE             noIg            salto si son
+.                  diferentes-->>ya no es equilatero
+  C006 91 02                       CMPA            lado3           sino, comparo
+.                  acumA contra el lado3
+  C008 27 0E                       BEQ             esEq            salto si son
+.                  iguales-->>es equilatero
+  C00A 20 12                       BRA             esIs            sino, salto
+.                  si son diferentes-->>es isosceles
+
+  C00C 91 02       noIg            CMPA            lado3           comparo acumA
+.                  contra el lado3
+  C00E 27 0E                       BEQ             esIs            salto si son
+.                  iguales-->es isosceles
+  C010 96 01                       LDAA            lado2           almaceno el
+.                  lado2 en acumA
+  C012 91 02                       CMPA            lado3           comparo el
+.                  acumA contra el lado3
+  C014 26 0E                       BNE             esEs            salto si son
+.                  diferentes-->>es escaleno
+  C016 20 06                       BRA             esIS            sino, salto
+.                  si son iguales-->>es isosceles
+
+  C018 86 51       esEq            LDAA            #'Q             cargo el
+.                  ascii de Q en acumA
+  C01A 97 03                       STAA            tipoT           luego, lo
+.                  almaceno en memoria
+  C01C 20 0A                       BRA             fin
+
+  C01E 86 49       esIs            LDAA            #'I             cargo el
+.                  ascii de I en acumA
+  C020 97 03                       STAA            tipoT           luego, lo
+.                  almaceno en memoria
+  C022 20 04                       BRA             fin
+
+  C024 86 45       esEs            LDAA            #'E             cargo el
+.                  ascii de E en acumA
+  C026 97 03                       STAA            tipoT           luego, lo
+.                  almaceno en memoria
+  C028 20 FE       fin             BRA             fin
+
+  Symbol Table 
+
+  ESEQ               C018
+  NOIG               C00C
+  ESES               C024
+  TIPOT              0003
+  Symbol Table     thrass11.tmp                                     PAGE       2
+
+  MAIN               C000
+  ESIS               C01E
+  FIN                C028
+  LADO1              0000
+  LADO2              0001
+  LADO3              0002

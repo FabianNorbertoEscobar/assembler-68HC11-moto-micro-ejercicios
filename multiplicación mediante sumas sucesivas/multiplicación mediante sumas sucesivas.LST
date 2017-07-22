@@ -1,0 +1,32 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   *multiplicacin mediante mtodo de sumas sucesivas
+
+                                   ORG             0000
+                   factor1         RMB             1               reservo
+.                  memoria para factores y resultado
+                   factor2         RMB             1
+                   mult            RMB             1
+
+                                   ORG             $C000
+  C000 4F          inicio          CLRA                            limpio acumA
+  C001 D6 00                       LDAB            factor1         cargo uno de
+.                  los factores en acumB
+  C003 9B 01       ciclo           ADDA            factor2         acumulo el
+.                  otro factor en acumA
+  C005 5A                          DECB                            decremento
+.                  acumB
+  C006 26 FB                       BNE             ciclo           repito ciclo
+.                  hasta llegar a cero
+  C008 97 02                       STAA            mult            cargo el
+.                  resultado en memoria
+  C00A 20 FE       fin             BRA             fin
+
+  Symbol Table 
+
+  MULT               0002
+  FACTOR1            0000
+  FACTOR2            0001
+  CICLO              C003
+  FIN                C00A
+  INICIO             C000

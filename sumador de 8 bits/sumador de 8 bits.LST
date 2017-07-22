@@ -1,0 +1,29 @@
+  ADDR B1 B2 B3 B4 D:\UNLaM\ARQUITECTURA DE COMPUTADORAS\FABIAN\    PAGE       1
+
+                   * suma en 8 bits
+
+                                   ORG             0000
+  0000 03          dato1           DB              3               defino los
+.                  datos a sumar
+  0001 0C          dato2           DB              12
+                   result          RMB             1               reservo
+.                  memoria para el resultado de la suma
+
+                                   ORG             $C000
+  C000 96 00       main            LDAA            dato1           cargo el
+.                  primer sumando en acumA
+  C002 D6 01                       LDAB            dato2           cargo el
+.                  segundo sumando en acumB
+  C004 1B                          ABA                             suma los
+.                  acumuladores y asigna en acumA
+  C005 97 02                       STAA            result          almaceno el
+.                  resultado en memoria
+  C007 20 FE       fin             BRA             fin
+
+  Symbol Table 
+
+  DATO1              0000
+  DATO2              0001
+  RESULT             0002
+  MAIN               C000
+  FIN                C007
